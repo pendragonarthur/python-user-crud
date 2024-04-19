@@ -50,4 +50,3 @@ def get_users_by_username(person_id):
     except Exception as e:
         print(f"Error: {e}")
 
-get_users_by_username("66217c4bcbab87c522785e73")
