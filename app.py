@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import os
+import requests
 
 load_dotenv()
 
@@ -10,20 +11,41 @@ client = MongoClient(connection)
 
 db = client["user_db"]
 collection = db.user_collection
+address_collection = db.address_collection
 
 def create_user():
+    
     try:
         username = str(input("Insert your username: "))
         email = str(input("Insert your best email: "))
         age = int(input("Insert your age: "))
+        zip_code = input("Insert your Zip Code: ")
+
+        response = requests.get(f"https://viacep.com.br/ws/{zip_code}/json/")
+
+        if response.status_code == 200:
+            address_info = response.json()
+            address = {
+                "street": address_info.get("logradouro", ""),
+                "city": address_info.get("localidade", ""),
+                "zipcode": address_info.get("cep", ""),
+                "state": address_info.get("uf", ""),
+                "country": address_info.get("pais", "")
+            }
+        else:
+            print("Failed to find zip code.")
+            return
+
+        address["owner"] = username
 
         user = {
             "username": username, 
             "email": email, 
-            "age": age
+            "age": age,
+            "address": address
         }
 
-        collection.insert_one(user)
+        created_user = collection.insert_one(user)
         print("User created successfully!")
     
     except Exception as e:
