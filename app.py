@@ -125,5 +125,3 @@ def update_user_by_username():
 
     except Exception as e:
         print(f"Error: {e}")
-
-get_user_by_username()
