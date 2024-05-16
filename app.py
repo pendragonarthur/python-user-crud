@@ -51,7 +51,7 @@ def create_user():
     except Exception as e:
         print(f"Error: {e}")
 
-def get_user_by_username(person_id):
+def get_user_by_username():
     try:
         user = str(input("Insert the username to be listed: "))
 
@@ -125,3 +125,5 @@ def update_user_by_username():
 
     except Exception as e:
         print(f"Error: {e}")
+
+get_user_by_username()
